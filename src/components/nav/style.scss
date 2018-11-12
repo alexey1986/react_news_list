@@ -1,0 +1,28 @@
+.navbar {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    flex-shrink: 0;
+    align-items: center;
+    padding: .5rem 1rem;
+    justify-content: flex-start;
+    background-color: #343a40;
+}
+.navbar-nav {
+    display: flex;
+    flex-direction: column;
+    padding-left: 0;
+    list-style: none;
+    flex-direction: row;
+    margin: 0;
+}
+
+.nav-link {
+    display: block;
+    color: rgba(255,255,255,.5);
+    padding: .5rem 1rem;
+}
+
+.active {
+    color: #fff;
+}
