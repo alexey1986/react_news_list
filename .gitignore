@@ -10,7 +10,7 @@
 /build
 
 # temp
-/tree_app
+/src/tree_app
 
 # misc
 .DS_Store
