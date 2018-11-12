@@ -17,7 +17,7 @@ class Articles extends Component {
 
   handleFilterTextChange(e) {
     this.setState({
-      filterText: e.target.value
+      filterText: e.target.value.toLowerCase()
     });
   }
 

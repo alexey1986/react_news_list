@@ -9,7 +9,7 @@ class NavBar extends React.Component {
             <nav className="navbar">
                 <ul className="navbar-nav">
                     <li className="nav-link"><NavLink to="/articles" activeClassName="active">Articles</NavLink></li>
-                    <li className="nav-link"><NavLink to="/tree" activeClassName="active">Tree View</NavLink></li>
+                    {/* <li className="nav-link"><NavLink to="/tree" activeClassName="active">Tree View</NavLink></li> */}
                 </ul>
             </nav>
         )
