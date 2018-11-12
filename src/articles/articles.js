@@ -2,76 +2,77 @@ import React, { Component } from 'react';
 import NewsAPI from 'newsapi';
 import './style.scss';
 
-const api_key = new NewsAPI('204141cf2b5443618d7531afb82b6bac');
+const API_KEY = new NewsAPI('204141cf2b5443618d7531afb82b6bac');
+const CATEGORIES = "business entertainment general health science sports technology";
 
 class Articles extends Component {
   constructor(props) {
     super(props);
     this.state = {
       articles: [],
-      article: null,
-      filterText: ''
+      article: null
     };
-    this.handleFilterTextChange = this.handleFilterTextChange.bind(this);
+    this.handleChangeCategory = this.handleChangeCategory.bind(this);
+    this.handleSearchByKeyWord = this.handleSearchByKeyWord.bind(this);    
   }
 
-  handleFilterTextChange(e) {
-    this.setState({
-      filterText: e.target.value.toLowerCase()
-    });
+  handleChangeCategory(e) {
+    this.getNews(null, e.target.innerText.toLowerCase()).then(() => this.selectFirstArticle());
+  }
+
+  handleSearchByKeyWord(e) {
+    this.getNews(null, null, e.target.value).then(() => this.selectFirstArticle());
   }
 
   componentDidMount() {
-    api_key.v2.topHeadlines({
-      country: 'us'
+    this.getNews().then(() => {
+      // show first article as default
+      this.selectFirstArticle();
+    });
+  }
+
+  async getNews(country, category, q) {
+    return API_KEY.v2.topHeadlines({
+      country: country || 'us',
+      category: category || '',
+      q: q || '' // keywords or a phrase to search for
     }).then(response => {
         this.setState({
           articles: response.articles
         });
-        // show first article as default
-        this.selectArticle(response.articles[0]);
       }
     );
   }
   
-  selectArticle = selectedArticle => {
+  selectArticle = selected => {
     this.setState({
-      article: selectedArticle
+      article: selected
     });
-  };   
+  };
+
+  selectFirstArticle = () => {
+    this.selectArticle(this.state.articles[0]);
+  }
 
   render() {
-    const { articles, article, filterText } = this.state;
-    const filteredArticles = [];
-    let lastTitle = null;
-
-    articles.forEach((article) => {
-      const title = article.title.toLowerCase();
-      if (title.indexOf(filterText) === -1) {
-        return;
-      }
-      if (title !== lastTitle) {
-        filteredArticles.push(article);
-      }
-      lastTitle = title;
-    });
+    const { articles, article } = this.state;
+    const categories = CATEGORIES.split(" ");
 
     return (
       <div className="article-body">      
         <aside className="article-sidebar">
           {/* search filter */}
-          <input
-            type="text"
-            className="article-filter"
-            placeholder="Search..."
-            value={this.props.filterText}
-            onChange={this.handleFilterTextChange}
-          />
+          <div className="article-filter">
+            <h2>Chose category:</h2>
+            {categories.map((category, i) => <button key={"cat_" + i} onClick={this.handleChangeCategory}>{category}</button>)}
+            <h2>Search news by key words:</h2>
+            <input type="text" onChange={this.handleSearchByKeyWord} />
+          </div>
           {/* articles list */}
           <ul className="article-list">
-            {filteredArticles.map((article, index) => (
+            {articles.map((article, index) => (
               <li className="article-item" onClick={() => this.selectArticle(article)} key={index + "_" + article.source.id}>
-                <img className="article-image" src={article.urlToImage} />
+                <img className="article-image" src={article.urlToImage} alt={article.source.name} />
                 <h2 className="article-title">{article.title}</h2>
                 <p className="article-description">{article.description}</p>
               </li>
@@ -82,10 +83,10 @@ class Articles extends Component {
         <div className="article-content">
           {article && (
             <div>
-              <h2 className="article-title">{article.title}</h2>
+              <h3 className="article-title">{article.title}</h3>
               <p><small>Source: <a href={article.url}>{article.source.name}</a> Date: {article.publishedAt} </small></p>
               <p>{article.content}</p>
-              <img src={article.urlToImage} />              
+              <img src={article.urlToImage} alt={article.source.name} />              
             </div>
           )}
         </div>
