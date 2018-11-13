@@ -3,26 +3,23 @@ import NewsAPI from 'newsapi';
 import './style.scss';
 
 const API_KEY = new NewsAPI('204141cf2b5443618d7531afb82b6bac');
-const CATEGORIES = "business entertainment general health science sports technology";
+const CATEGORIES = ["business", "entertainment", "general", "health", "science", "sports", "technology"];
 
 class Articles extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      articles: [],
-      article: null
-    };
-    this.handleChangeCategory = this.handleChangeCategory.bind(this);
-    this.handleSearchByKeyWord = this.handleSearchByKeyWord.bind(this);    
+
+  state = {
+    articles: [],
+    article: null
+  }
+  
+  handleChangeCategory = (e) => {
+    this.getNews(e.target.innerText.toLowerCase()).then(() => this.selectFirstArticle());
   }
 
-  handleChangeCategory(e) {
-    this.getNews(null, e.target.innerText.toLowerCase()).then(() => this.selectFirstArticle());
+  handleSearchByKeyWord = (e) => {
+    this.getNews(null, e.target.value).then(() => this.selectFirstArticle());
   }
-
-  handleSearchByKeyWord(e) {
-    this.getNews(null, null, e.target.value).then(() => this.selectFirstArticle());
-  }
+  
 
   componentDidMount() {
     this.getNews().then(() => {
@@ -31,9 +28,9 @@ class Articles extends Component {
     });
   }
 
-  async getNews(country, category, q) {
+  async getNews(category, q) {
     return API_KEY.v2.topHeadlines({
-      country: country || 'us',
+      country: 'us',
       category: category || '',
       q: q || '' // keywords or a phrase to search for
     }).then(response => {
@@ -56,7 +53,6 @@ class Articles extends Component {
 
   render() {
     const { articles, article } = this.state;
-    const categories = CATEGORIES.split(" ");
 
     return (
       <div className="article-body">      
@@ -64,7 +60,7 @@ class Articles extends Component {
           {/* search filter */}
           <div className="article-filter">
             <h2>Chose category:</h2>
-            {categories.map((category, i) => <button key={"cat_" + i} onClick={this.handleChangeCategory}>{category}</button>)}
+            {CATEGORIES.map((category, i) => <button key={"cat_" + i} onClick={this.handleChangeCategory}>{category}</button>)}
             <h2>Search news by key words:</h2>
             <input type="text" onChange={this.handleSearchByKeyWord} />
           </div>

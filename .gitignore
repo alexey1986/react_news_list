@@ -9,9 +9,6 @@
 # production
 /build
 
-# temp
-/src/tree_app
-
 # misc
 .DS_Store
 .env.local
