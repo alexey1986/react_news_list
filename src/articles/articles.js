@@ -12,7 +12,8 @@ const CATEGORIES = ["business", "entertainment", "general", "health", "science",
 class Articles extends Component {
   state = {
     articles: [],
-    article: null
+    article: null,
+    isLoading: true
   }
   
   handleChangeCategory = e => {
@@ -48,29 +49,29 @@ class Articles extends Component {
     );
   }
 
-  // TODO
-  // showSpiner = () => {
-//
-  //}
-
-  // hideSpiner = () => {
-   // 
-  //}
-
   componentDidMount() {
-    // TODO send request before rendering component, show is loading, set state with news
-    // add spiner
     this.getNews().then(() => {
+      // hide loader
+      this.state.isLoading = !this.state.isLoading;
       // show first article as default
       this.selectFirstArticle();
     });
   }
   
   render() {
-    const { articles, article } = this.state; // articles = this.state.articles
+    const { articles, article, isLoading } = this.state;
+
+    if (isLoading) {
+      return (
+        <div class="spinner">
+          <div class="dot1"></div>
+          <div class="dot2"></div>
+        </div>
+      )
+    }
 
     return (
-      <div className="article-body">      
+      <div className="article-body">
         <aside className="article-sidebar">
           <div className="article-filter">
             {/* Categories */}
