@@ -13,16 +13,21 @@ class Articles extends Component {
   state = {
     articles: [],
     article: null,
+    category: '',
     isLoading: true
   }
   
   handleChangeCategory = e => {
-    this.getNews(e.target.innerText.toLowerCase())
-      .then(() => this.selectFirstArticle());
+    const category = e.target.innerText.toLowerCase();
+    this.getNews(category)
+      .then(() => {
+        this.selectFirstArticle();
+        this.setState({ category: category});
+      });
   }
 
   handleSearchByKeyWord = e => {
-    this.getNews(null, e.target.value)
+    this.getNews(this.state.category, e.target.value)
       .then(() => this.selectFirstArticle());
   }
 

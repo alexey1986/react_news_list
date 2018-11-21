@@ -1,7 +1,7 @@
 import React from 'react';
 import NavBar from '../components/nav/nav.js';
 import TreeView from '../tree_app/TreeView.js';
-import Articles from '../articles/articles.js';
+import Articles from '../articles/articles-list.js';
 //import { BrowserRouter as Router, Route } from "react-router-dom";
 import { HashRouter, Route } from "react-router-dom";
 import './style.scss';
